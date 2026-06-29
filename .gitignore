@@ -2,5 +2,11 @@ node_modules
 dist
 coverage
 .env
+.env.local
 .DS_Store
 *.local
+
+# Python backend
+backend/.venv
+backend/**/__pycache__
+backend/**/*.pyc

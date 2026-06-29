@@ -1,0 +1,25 @@
+{
+  "numTotalTests": 3,
+  "numPassedTests": 2,
+  "testResults": [
+    {
+      "name": "/repo/src/auth.spec.ts",
+      "status": "passed",
+      "startTime": 1000,
+      "endTime": 3000,
+      "assertionResults": [
+        { "status": "passed", "title": "logs in" },
+        { "status": "passed", "title": "logs out" }
+      ]
+    },
+    {
+      "name": "/repo/src/checkout.spec.ts",
+      "status": "failed",
+      "startTime": 4000,
+      "endTime": 4500,
+      "assertionResults": [
+        { "status": "failed", "title": "applies discount" }
+      ]
+    }
+  ]
+}
