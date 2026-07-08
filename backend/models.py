@@ -35,6 +35,10 @@ class TestRun(CamelModel):
     failed_tests: int
     ran_at: str  # ISO 8601 timestamp string
     duration_seconds: float
+    # True when this suite has both passed and failed at least once across
+    # recent uploads (see backend/store.py). Distinct from `status`, which
+    # only reflects retry behavior *within* a single run.
+    flaky: bool = False
 
 
 class PassRateSummary(CamelModel):
@@ -49,5 +53,15 @@ class ParsedResult(CamelModel):
     """Response shape for POST /upload/{format} — mirrors ParsedJestResult
     in src/utils/parseJestResult.ts (summary + testRuns)."""
 
+    summary: PassRateSummary
+    test_runs: list[TestRun]
+
+
+class RunRecord(CamelModel):
+    """One stored upload event — mirrors RunHistoryEntry in
+    src/types/testRun.ts. Response shape for GET /runs."""
+
+    run_id: str
+    uploaded_at: str  # ISO 8601 timestamp string, set server-side on upload
     summary: PassRateSummary
     test_runs: list[TestRun]

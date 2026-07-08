@@ -136,6 +136,10 @@ function toTestRun(suite: JestSuiteResult, index: number): TestRun {
     failedTests,
     ranAt: safeIsoString(startTime),
     durationSeconds: Math.max(0, (endTime - startTime) / 1000),
+    // Cross-run flakiness requires upload history, which this client-side
+    // parser doesn't have access to — the backend's store.py computes the
+    // real value. Always false here.
+    flaky: false,
   };
 }
 

@@ -3,6 +3,7 @@
 // handles the promise.
 
 import type { ParsedJestResult } from "./parseJestResult";
+import type { RunHistoryEntry } from "../types/testRun";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000";
 
@@ -10,7 +11,11 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ?? "http://localhost:8000
  *  more parsers (e.g. "junit" for JUnit XML) land server-side. */
 export type UploadFormat = "jest";
 
-export class UploadError extends Error {}
+/** Base class for backend request failures — covers unreachable backend,
+ *  non-2xx responses, and network errors. */
+export class ApiError extends Error {}
+
+export class UploadError extends ApiError {}
 
 /**
  * Uploads a test result file to the backend for parsing.
@@ -40,6 +45,30 @@ export async function uploadTestResultFile(
   if (!response.ok) {
     const detail = await safeReadErrorDetail(response);
     throw new UploadError(detail ?? `Upload failed with status ${response.status}.`);
+  }
+
+  return response.json();
+}
+
+/**
+ * Fetches upload history (newest first) for the pass-rate trend chart.
+ *
+ * @throws {ApiError} if the backend responds with a non-2xx status, or the
+ *   request fails outright (network error, backend not running, etc).
+ */
+export async function fetchRunHistory(): Promise<RunHistoryEntry[]> {
+  let response: Response;
+  try {
+    response = await fetch(`${API_BASE_URL}/runs`);
+  } catch {
+    throw new ApiError(
+      "Could not reach the backend. Is it running at " + API_BASE_URL + "?"
+    );
+  }
+
+  if (!response.ok) {
+    const detail = await safeReadErrorDetail(response);
+    throw new ApiError(detail ?? `Fetching run history failed with status ${response.status}.`);
   }
 
   return response.json();

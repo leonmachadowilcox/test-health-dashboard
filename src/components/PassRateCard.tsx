@@ -23,8 +23,16 @@ export default function PassRateCard({ summary }: PassRateCardProps) {
         {passRate}%
       </p>
       <p className="mt-2 text-sm text-slate-500">
-        {totalRuns} runs &middot; {flakyCount} flaky{" "}
-        {flakyCount === 1 ? "test" : "tests"}
+        {totalRuns} runs &middot;{" "}
+        <span
+          className={
+            flakyCount > 0
+              ? "font-semibold text-status-flaky"
+              : "text-slate-500"
+          }
+        >
+          {flakyCount} flaky {flakyCount === 1 ? "test" : "tests"}
+        </span>
       </p>
     </div>
   );

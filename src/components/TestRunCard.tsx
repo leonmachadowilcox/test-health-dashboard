@@ -26,7 +26,18 @@ export default function TestRunCard({ run }: TestRunCardProps) {
           {run.durationSeconds}s &middot; {formatRanAt(run.ranAt)}
         </p>
       </div>
-      <StatusBadge status={run.status} />
+      <div className="flex items-center gap-2">
+        {run.flaky && (
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
+            <span
+              className="h-2 w-2 rounded-full bg-status-flaky"
+              aria-hidden="true"
+            />
+            Flaky
+          </span>
+        )}
+        <StatusBadge status={run.status} />
+      </div>
     </div>
   );
 }
