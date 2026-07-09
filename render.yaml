@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: test-health-dashboard-api
+    runtime: python
+    plan: free
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10.18
+      - key: CORS_ORIGINS
+        value: http://localhost:5173
+        # Update this after the frontend is deployed to Vercel, e.g.
+        # https://test-health-dashboard.vercel.app
+    healthCheckPath: /health

@@ -10,3 +10,5 @@ coverage
 backend/.venv
 backend/**/__pycache__
 backend/**/*.pyc
+.vercel
+.env*
