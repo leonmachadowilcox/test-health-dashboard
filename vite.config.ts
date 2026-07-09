@@ -8,14 +8,33 @@ export default defineConfig({
     port: 5173,
   },
   test: {
-    environment: "node",
+    environment: "jsdom",
+    include: ["src/**/*.test.{ts,tsx}", "e2e/**/*.spec.ts"],
+    exclude: ["**/node_modules/**", "**/e2e/**", "node_modules/**", "e2e/**"],
+    setupFiles: ["./src/test-setup.ts"],
     coverage: {
       provider: "v8",
       reporter: ["text", "html"],
-      // Project goal is >=80% coverage across the whole codebase, but most
-      // files don't have tests yet this early in the build. Re-enable a
-      // `thresholds` block here once coverage is being tracked project-wide
-      // — turning it on now would fail every run on untested files.
+      exclude: [
+        "node_modules/**",
+        "e2e/**",
+        "playwright.config.ts",
+        "postcss.config.js",
+        "tailwind.config.js",
+        ".eslintrc.cjs",
+        "src/main.tsx",
+        "src/test-setup.ts",
+        "src/utils/mockData.ts",
+        "**/emscripten_fetch_worker.js",
+      ],
+      thresholds: {
+        global: {
+          lines: 80,
+          functions: 80,
+          branches: 80,
+          statements: 80,
+        },
+      },
     },
   },
 });
